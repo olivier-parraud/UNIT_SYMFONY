@@ -9,7 +9,7 @@ services:
     # image: php:8.2-fpm
     build: . # ← Indique à Docker de chercher le "Dockerfile" dans le dossier courant
     # Nomme le conteneur pour l'identifier facilement (au lieu d'un nom aléatoire)
-    container_name: symfony_app
+    container_name: unit_symfony
     # Définit le dossier de travail par défaut à l'intérieur du conteneur
     working_dir: /var/www/html
     # Liste les partages de dossiers (volumes) entre l'hôte et le conteneur

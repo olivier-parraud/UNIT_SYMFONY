@@ -130,3 +130,25 @@ __________________________________________________________
 
 2. Quelle commande doit être lancée avant cette commande ?
 
+`docker compose up -d --build`
+
+<img src="/img/exec.png">
+
+Trouver la commande pour sortir de cet environnement.
+
+Pour sortir de l'environnement j'utilise la commande :
+`exit`
+
+
+## Étape 6 : Tester l'application
+1. Accédez à votre application Symfony sur http://localhost:8080.
+2. Tu es prêt pour développer ton projet Symfony avec une base bien
+configurée ! 🚀
+Maintenant observe ta page et trouvez le lien pour apprendre à coder
+sous Symfony
+1. Créer un menu pour te connecter à une page administrateur et
+utilisateur
+2. Test et fait migrer tes données dans la base de données
+3. Réalise une page esthétiquement pro d'accueil avec son menu
+en haut à droite de connexion, rien de plus.
+4. Cette page doit bien sûr persister aussi.
