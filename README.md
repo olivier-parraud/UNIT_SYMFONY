@@ -43,10 +43,178 @@ Je l'ai déjà fait.
 Créez un répertoire pour votre projet Symfony nommez-le
 “UNIT_SYMFONY” qui hébergera votre readme et les autres dossiers du
 projet
-Étape 3 : Préparer le fichier Docker Compose
+
+Je l'ai déjà fait.
+
+## Étape 3 : Préparer le fichier Docker Compose
 Ce fichier est fourni en annexe de ce document.
 Expliquer dans le readme.md à la racine du projet chaque ligne de ce
 fichier
+
+Voici la version du docker-compose.yml commenté ligne par ligne.
+
+`# Définit l'ensemble des conteneurs (services) qui vont être lancés
+services:
+
+  # ---------------------------------------------------------------------------
+  # Conteneur de l'application Symfony (PHP)
+  # ---------------------------------------------------------------------------
+  app:
+    # Utilise l'image officielle PHP 8.2 avec l'exécution FPM (FastCGI Process Manager)
+    image: php:8.2-fpm
+    # Nomme le conteneur pour l'identifier facilement (au lieu d'un nom aléatoire)
+    container_name: symfony_app
+    # Définit le dossier de travail par défaut à l'intérieur du conteneur
+    working_dir: /var/www/html
+    # Liste les partages de dossiers (volumes) entre l'hôte et le conteneur
+    volumes:
+      # Monte le dossier local ./app dans le conteneur pour le code source persistant
+      - ./app:/var/www/html 
+      # Lie le volume nommé app_logs au dossier des logs PHP pour ne pas les perdre
+      - app_logs:/var/log/php 
+      # Lie le volume nommé app_cache au dossier var de Symfony (vitesse et persistance)
+      - app_cache:/var/www/html/var 
+    # Connecte ce conteneur au réseau virtuel "symfony_network"
+    networks:
+      - symfony_network
+
+  # ---------------------------------------------------------------------------
+  # Serveur Web (Nginx) pour intercepter les requêtes HTTP
+  # ---------------------------------------------------------------------------
+  webserver:
+    # Utilise la dernière image stable du serveur web Nginx
+    image: nginx:stable
+    # Nomme le conteneur pour l'environnement Docker
+    container_name: symfony_webserver
+    # Redirige le port 8080 de ta machine vers le port 80 (HTTP) du conteneur
+    ports:
+      - "8080:80"
+    # Liste les volumes pour la configuration et les fichiers du serveur web
+    volumes:
+      # Partage le même code source que le conteneur PHP pour que Nginx y accède
+      - ./app:/var/www/html 
+      # Injecte tes fichiers de configuration Nginx locaux dans le conteneur
+      - ./nginx:/etc/nginx/conf.d 
+      # Centralise et persiste les fichiers de logs de requêtes Nginx
+      - nginx_logs:/var/log/nginx 
+    # Indique que Nginx a besoin que le conteneur "app" soit démarré pour fonctionner
+    depends_on:
+      - app
+    # Connecte ce conteneur au réseau virtuel commun
+    networks:
+      - symfony_network
+
+  # ---------------------------------------------------------------------------
+  # Base de données (MySQL)
+  # ---------------------------------------------------------------------------
+  database:
+    # Utilise l'image officielle du système de gestion de base de données MySQL 8.0
+    image: mysql:8.0
+    # Nomme le conteneur pour l'environnement Docker
+    container_name: symfony_db
+    # Variables d'environnement pour configurer l'instance MySQL à son lancement
+    environment:
+      # Indique l'hôte de la base de données (utile pour les outils tiers)
+      PMA_HOST: symfony_db
+      # Définit le mot de passe du super-utilisateur (root)
+      MYSQL_ROOT_PASSWORD: root
+      # Crée automatiquement une base de données nommée "symfony" au démarrage
+      MYSQL_DATABASE: symfony
+      # Crée un utilisateur standard nommé "symfony"
+      MYSQL_USER: symfony
+      # Définit le mot de passe de cet utilisateur standard
+      MYSQL_PASSWORD: symfony
+    # Redirige le port standard MySQL 3306 de ta machine vers le conteneur
+    ports:
+      - "3306:3306"
+    # Liste les volumes pour la persistance des données réelles
+    volumes:
+      # Lie le volume db_data au stockage de MySQL pour éviter de perdre les données à l'arrêt
+      - db_data:/var/lib/mysql # ← Stocke les bases de données et relations internes
+    # Connecte ce conteneur au réseau virtuel commun
+    networks:
+      - symfony_network
+
+  # ---------------------------------------------------------------------------
+  # Outil d'administration de base de données léger (Adminer)
+  # ---------------------------------------------------------------------------
+  adminer:
+    # Utilise l'image officielle d'Adminer (alternative légère à phpMyAdmin)
+    image: adminer
+    # Nomme le conteneur pour l'environnement Docker
+    container_name: symfony_adminer
+    # Redémarre automatiquement le conteneur s'il s'arrête ou si Docker redémarre
+    restart: always
+    # Redirige le port 8081 de ta machine vers le port 8080 interne d'Adminer
+    ports:
+      - "8081:8080" # Adminer sera accessible sur http://localhost:8081
+    # Attend que le conteneur "database" soit prêt avant de se lancer
+    depends_on:
+      - database
+    # Connecte ce conteneur au réseau virtuel commun
+    networks:
+      - symfony_network
+
+  # ---------------------------------------------------------------------------
+  # Outil d'administration de base de données complet (phpMyAdmin)
+  # ---------------------------------------------------------------------------
+  phpmyadmin:
+    # Utilise l'image officielle de la communauté phpMyAdmin
+    image: phpmyadmin/phpmyadmin
+    # Nomme le conteneur pour l'environnement Docker
+    container_name: symfony_phpmyadmin
+    # Redémarre automatiquement le conteneur en cas de plantage
+    restart: always
+    # Redirige le port 8082 de ta machine vers le port 80 interne de phpMyAdmin
+    ports:
+      - "8082:80" # phpMyAdmin sera accessible sur http://localhost:8082
+    # Variables d'environnement pour lier automatiquement phpMyAdmin à MySQL
+    environment:
+      # Dit à phpMyAdmin de se connecter au conteneur MySQL nommé "symfony_db"
+      PMA_HOST: symfony_db
+      # Donne le mot de passe root pour que phpMyAdmin ait tous les accès
+      MYSQL_ROOT_PASSWORD: root
+      # Définit le nom de la base de données interne requise par phpMyAdmin
+      PMA_PMADB: phpmyadmin # Nom de la base de configuration
+      # Définit l'utilisateur de contrôle pour les fonctionnalités avancées
+      PMA_CONTROLUSER: symfony # Utilisateur qui gère les tables internes
+      # Définit le mot de passe de cet utilisateur de contrôle
+      PMA_CONTROLPASS: symfony # Mot de passe du user de contrôle
+    # Attend que le conteneur "database" soit prêt avant de démarrer
+    depends_on:
+      - database
+    # Connecte ce conteneur au réseau virtuel commun
+    networks:
+      - symfony_network
+    # Volumes pour stocker les configurations propres à phpMyAdmin
+    volumes:
+      # Associe le volume phpmyadmin_data au stockage interne de phpMyAdmin
+      - phpmyadmin_data:/var/lib/phpmyadmin # Volume pour les données internes
+
+# -----------------------------------------------------------------------------
+# Configuration des réseaux (permet aux conteneurs de communiquer entre eux)
+# -----------------------------------------------------------------------------
+networks:
+  # Déclare le nom du réseau personnalisé utilisé plus haut
+  symfony_network:
+    # Utilise le driver "bridge", le standard pour isoler les conteneurs sur une même machine
+    driver: bridge
+
+# -----------------------------------------------------------------------------
+# Déclaration des volumes globaux (pour la persistance des données)
+# -----------------------------------------------------------------------------
+volumes:
+  # Déclare le volume persistant pour les données MySQL
+  db_data: # Pour MySQL
+  # Déclare le volume persistant pour les configurations de phpMyAdmin
+  phpmyadmin_data: # Pour phpMyAdmin
+  # Déclare le volume persistant pour les fichiers de logs de PHP
+  app_logs: # Logs PHP-FPM
+  # Déclare le volume persistant pour les caches et sessions Symfony
+  app_cache: # Cache, sessions Symfony
+  # Déclare le volume persistant pour les fichiers de logs de Nginx
+  nginx_logs: # Logs Nginx persistants`
+
 
 Créer un fichier docker-compose.yml
 Créez ce fichier à la racine de votre dossier de projet avec le contenu
