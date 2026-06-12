@@ -81,7 +81,25 @@ Créer un fichier Dockerfile
 Créez ce fichier à la racine de votre dossier de projet avec le contenu
 approprié fourni en annexes.
 Expliquez dans le readme du dossier projet ce qu’il fait ligne par ligne
-Étape 6 : Installer Symfony
+
+
+Le fichier Dockerfile commenté ligne par ligne est directement commenté dans le fichier orignal.
+./UNIT_SYMFONY/Dockerfile
+
+
+Pourquoi utiliser ce Dockerfile ?
+
+1. Dépasser les limites de l'image officielle
+L'image officielle fournie par Docker Hub (php:8.2-fpm) est très épurée. Elle contient le strict minimum pour faire tourner PHP, mais elle ne possède ni Git, ni Unzip, ni Composer.
+
+Or, Symfony est un framework moderne qui dépend entièrement de Composer pour installer ses packages (les bundles). Sans ce Dockerfile, ton conteneur PHP serait incapable d'installer ou de mettre à jour les dépendances de ton projet Symfony.
+
+2. Le principe de l'automatisation et de la reproductibilité
+Le Dockerfile est une "recette de cuisine". Au lieu d'entrer manuellement dans le conteneur pour installer Composer et les outils à chaque fois que tu recrées ton environnement, Docker lit ce fichier et automatise toute l'installation.
+
+Cela garantit que ton application fonctionnera exactement de la même manière sur ton ordinateur de développement, sur celui de ton formateur, ou sur un serveur de production.
+
+## Étape 6 : Installer Symfony
 
 Positionnez vous dans le terminal visual studio dans votre dossier projet
 Taper cette commande :
@@ -89,9 +107,9 @@ symfony new app --version="7.2.x" --webapp
 Ceci pour installer les fichiers de symfony dans le dossier app
 Observez le résultat dans votre visual studio
 
-_6
 
-Étape 5 : Configurer la base de données sur le projet
+
+## Étape 5 : Configurer la base de données sur le projet
 Modifiez le fichier .env de Symfony dans le répertoire app pour
 connecter la base de données (modification ci-dessous, ajouter
 seulement la ligne “DATABASE_URL”).
