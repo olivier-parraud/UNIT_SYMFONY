@@ -1,6 +1,6 @@
 # Définit l'image de base officielle sur laquelle on va construire notre propre image.
 # Ici, on part d'une distribution Linux où PHP 8.2 et l'environnement FPM sont déjà préinstallés.
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # Met à jour la liste des paquets système de la distribution Linux (apt-get update)
 # puis installe les outils "curl" (pour télécharger), "unzip" (pour décompresser) et "git" (gestion de version).

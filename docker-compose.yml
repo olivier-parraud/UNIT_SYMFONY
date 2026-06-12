@@ -6,8 +6,8 @@ services:
   # ---------------------------------------------------------------------------
   app:
     # Utilise l'image officielle PHP 8.2 avec l'exécution FPM (FastCGI Process Manager)
-    # image: php:8.2-fpm
-    build: . # ← Indique à Docker de chercher le "Dockerfile" dans le dossier courant
+    image: php:8.3-fpm
+     # ← Indique à Docker de chercher le "Dockerfile" dans le dossier courant
     # Nomme le conteneur pour l'identifier facilement (au lieu d'un nom aléatoire)
     container_name: unit_symfony
     # Définit le dossier de travail par défaut à l'intérieur du conteneur
@@ -15,7 +15,7 @@ services:
     # Liste les partages de dossiers (volumes) entre l'hôte et le conteneur
     volumes:
       # Monte le dossier local ./app dans le conteneur pour le code source persistant
-      - ./app:/var/www/html 
+      - .:/var/www/html 
       # Lie le volume nommé app_logs au dossier des logs PHP pour ne pas les perdre
       - app_logs:/var/log/php 
       # Lie le volume nommé app_cache au dossier var de Symfony (vitesse et persistance)
@@ -38,7 +38,7 @@ services:
     # Liste les volumes pour la configuration et les fichiers du serveur web
     volumes:
       # Partage le même code source que le conteneur PHP pour que Nginx y accède
-      - ./app:/var/www/html 
+      - .:/var/www/html 
       # Injecte tes fichiers de configuration Nginx locaux dans le conteneur
       - ./nginx:/etc/nginx/conf.d 
       # Centralise et persiste les fichiers de logs de requêtes Nginx
