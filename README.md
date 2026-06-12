@@ -23,15 +23,23 @@ Pour Docker-compose :
 2. Installer Composer (si ce n'est pas déjà fait)
 Symfony nécessite Composer pour gérer ses dépendances. Vous
 pouvez le télécharger depuis getcomposer.org.
+
 Quelles commandes permettent de vérifier les versions de ces
 deux éléments et par conséquent de vérifier qu’ils sont bien
 installés ?
+
+Pour Composer :
+`composer -v`
+
+<img src="/img/composer.png">
+
+
 3. Installer symfony CLI (si ce n'est pas déjà fait)
 https://symfony.com/download#step-1-install-symfony-cli
 
-_4
+Je l'ai déjà fait.
 
-Étape 2 : Créer un dossier de projet
+## Étape 2 : Créer un dossier de projet
 Créez un répertoire pour votre projet Symfony nommez-le
 “UNIT_SYMFONY” qui hébergera votre readme et les autres dossiers du
 projet
