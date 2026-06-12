@@ -58,7 +58,7 @@ Expliquez dans le readme du dossier projet ce qu’il fait ligne par ligne
 dans une ou deux phrases pour chaque services.
 
 
-La version du docker-compose.yml commenté ligne par ligne directement dans le fichier orignal.
+Le fichier docker-compose.yml commenté ligne par ligne est directement commenté dans le fichier orignal.
 ./UNIT_SYMFONY/docker-compose.yml
 
 
@@ -69,9 +69,11 @@ Créez un dossier nginx et le fichier default.conf dedans, avec le
 contenu approprié fourni en annexe.
 Expliquez dans le readme du dossier projet ce qu’il fait ligne par ligne
 
-_5
+Le fichier default.conf commenté ligne par ligne est directement commenté dans le fichier orignal.
+./UNIT_SYMFONY/nginx/default.conf
 
-Étape 5 : Préparer le fichier Dockerfile
+
+## Étape 5 : Préparer le fichier Dockerfile
 Ce fichier est fourni en annexe de ce document.
 Expliquer dans le readme.md à la racine du projet chaque ligne de ce
 fichier et pourquoi l’utiliser.
