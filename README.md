@@ -99,6 +99,7 @@ Le Dockerfile est une "recette de cuisine". Au lieu d'entrer manuellement dans l
 
 Cela garantit que ton application fonctionnera exactement de la même manière sur ton ordinateur de développement, sur celui de ton formateur, ou sur un serveur de production.
 
+
 ## Étape 6 : Installer Symfony
 
 Positionnez vous dans le terminal visual studio dans votre dossier projet
@@ -108,10 +109,24 @@ Ceci pour installer les fichiers de symfony dans le dossier app
 Observez le résultat dans votre visual studio
 
 
-
 ## Étape 5 : Configurer la base de données sur le projet
 Modifiez le fichier .env de Symfony dans le répertoire app pour
 connecter la base de données (modification ci-dessous, ajouter
 seulement la ligne “DATABASE_URL”).
 Trouver le moyen de générer une clef de sécurité forte.
 Inclure sa création dans le readme.
+
+Le fichier .env est a été modifié dans le fichier orignal.
+./UNIT_SYMFONY/.env
+
+
+
+__________________________________________________________
+
+
+1. Entrer dans le conteneur par l’invite de commande taper :
+
+`docker exec -it symfony_app bash`
+
+2. Quelle commande doit être lancée avant cette commande ?
+
