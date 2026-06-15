@@ -146,6 +146,14 @@ Pour sortir de l'environnement j'utilise la commande :
 configurée ! 🚀
 Maintenant observe ta page et trouvez le lien pour apprendre à coder
 sous Symfony
+
+<img src="/img/page1.png">
+<img src="/img/page2.png">
+<img src="/img/page3.png">
+<img src="/img/page4.png">
+
+
+
 1. Créer un menu pour te connecter à une page administrateur et
 utilisateur
 2. Test et fait migrer tes données dans la base de données
