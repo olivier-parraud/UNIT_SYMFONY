@@ -19,6 +19,20 @@
         {% endif %}
     </head>
     <body>
+    <nav style="background: #333; padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <a href="/" style="color: white; margin-right: 15px; text-decoration: none; font-weight: bold;">🏠 Accueil</a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_admin_dashboard') }}" style="color: #ff4a4a; margin-right: 15px; text-decoration: none; font-weight: bold;">🔐 Espace Admin</a>
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_user_profile') }}" style="color: #4a9eff; margin-right: 15px; text-decoration: none;">👤 Mon Profil</a>
+        {% endif %}
+    </div>
+
+</nav>
         {% block body %}{% endblock %}
     </body>
 </html>
