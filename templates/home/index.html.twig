@@ -3,17 +3,33 @@
 {% block title %}Accueil - Mon Projet Symfony{% endblock %}
 
 {% block body %}
-<div style="max-width: 800px; margin: 50px auto; padding: 20px; font-family: sans-serif; text-align: center;">
-    <h1>Bienvenue sur mon application Symfony ! 🚀</h1>
-    <p style="font-size: 18px; color: #666; margin-top: 20px;">
-        Ceci est la page d'accueil publique de ton projet pour ton devoir DWWM.
+<div style="max-width: 800px; margin: 60px auto; padding: 30px; font-family: sans-serif; text-align: center; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    
+    <h1>Bienvenue sur mon application ! 🚀</h1>
+    <p style="font-size: 18px; color: #666; margin-top: 15px;">
+        Ceci est la page d'accueil de ton devoir DWWM.
     </p>
 
-    <div style="margin-top: 40px; padding: 20px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-        <h3>💡 Test de navigation :</h3>
-        <p>Utilise la barre de navigation noire tout en haut pour tester les accès :</p>
-        <p>1. Clique sur <strong>Connexion</strong> pour te connecter.</p>
-        <p>2. Une fois connecté, les boutons <strong>Mon Profil</strong> ou <strong>Espace Admin</strong> apparaîtront selon ton compte !</p>
-    </div>
+    <hr style="border: 0; height: 1px; background: #eee; margin: 30px 0;">
+
+    {% if not app.user %}
+        <div style="padding: 20px; background: #fdfdfd; border: 1px dashed #ccc; border-radius: 8px;">
+            <p style="font-size: 16px; margin-bottom: 20px; color: #444;">
+                Pour accéder à ton espace utilisateur sécurisé, merci de t'identifier :
+            </p>
+            
+            {# Remplacement ici : On utilise une URL brute '/connexion' pour éviter le bug #}
+            <a href="/connexion" style="display: inline-block; background: #33cc66; color: white; padding: 12px 30px; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 6px;">
+                🔐 Se connecter à l'espace User
+            </a>
+        </div>
+    {% else %}
+        <div style="padding: 20px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; color: #2e7d32;">
+            <p style="font-size: 16px; margin: 0;">
+                🎉 Tu es actuellement connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
+            </p>
+        </div>
+    {% endif %}
+
 </div>
 {% endblock %}
