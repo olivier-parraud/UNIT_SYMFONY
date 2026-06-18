@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Mon Projet Symfony{% endblock %}
+{% block title %}Connexion - Mon Application{% endblock %}
 
 {% block body %}
-<div style="max-width: 800px; margin: 60px auto; padding: 30px; font-family: sans-serif; text-align: center; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+<div style="max-width: 400px; margin: 60px auto; padding: 30px; font-family: sans-serif; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #eee;">
     
-    <h1>Bienvenue sur mon application ! 🚀</h1>
-    <p style="font-size: 18px; color: #666; margin-top: 15px;">
-        Ceci est la page d'accueil de ton devoir DWWM.
-    </p>
+    <h1 style="text-align: center; margin-bottom: 10px; color: #333;">Bienvenue Mr. Bond</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 14px;">Veuillez vous connecter pour accéder à votre espace.</p>
 
-    <hr style="border: 0; height: 1px; background: #eee; margin: 30px 0;">
+    <form method="post">
+        {# Affichage de l'erreur si les identifiants sont faux #}
+        {% if error %}
+            <div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 14px;">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-    {% if not app.user %}
-        <div style="padding: 20px; background: #fdfdfd; border: 1px dashed #ccc; border-radius: 8px;">
-            <p style="font-size: 16px; margin-bottom: 20px; color: #444;">
-                Pour accéder à ton espace utilisateur sécurisé, merci de t'identifier :
-            </p>
-            
-            {# Remplacement ici : On utilise une URL brute '/connexion' pour éviter le bug #}
-            <a href="/connexion" style="display: inline-block; background: #33cc66; color: white; padding: 12px 30px; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 6px;">
-                🔐 Se connecter à l'espace User
-            </a>
+        <div style="margin-bottom: 20px;">
+            <label for="inputEmail" style="display: block; margin-bottom: 8px; font-weight: bold; color: #555;">Email</label>
+            <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;" autocomplete="email" required autofocus>
         </div>
-    {% else %}
-        <div style="padding: 20px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; color: #2e7d32;">
-            <p style="font-size: 16px; margin: 0;">
-                🎉 Tu es actuellement connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
-            </p>
-        </div>
-    {% endif %}
 
+        <div style="margin-bottom: 25px;">
+            <label for="inputPassword" style="display: block; margin-bottom: 8px; font-weight: bold; color: #555;">Mot de passe</label>
+            <input type="password" name="_password" id="inputPassword" style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;" autocomplete="current-password" required>
+        </div>
+
+        {# Jeton de sécurité CSRF pour éviter les failles #}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <button type="submit" style="background: #33cc66; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; box-shadow: 0 4px 6px rgba(51, 204, 102, 0.2);">
+            Se connecter
+        </button>
+    </form>
 </div>
 {% endblock %}
