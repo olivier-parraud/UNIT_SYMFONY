@@ -12,6 +12,10 @@ services:
     container_name: unit_symfony
     # Définit le dossier de travail par défaut à l'intérieur du conteneur
     working_dir: /var/www/html
+    
+    # --- MODIFICATION ICI : On force l'installation et l'activation du driver MySQL au démarrage ---
+    command: sh -c "docker-php-ext-install pdo_mysql && php-fpm"
+    
     # Liste les partages de dossiers (volumes) entre l'hôte et le conteneur
     volumes:
       # Monte le dossier local ./app dans le conteneur pour le code source persistant
@@ -117,7 +121,7 @@ services:
     # Variables d'environnement pour lier automatiquement phpMyAdmin à MySQL
     environment:
       # Dit à phpMyAdmin de se connecter au conteneur MySQL nommé "symfony_db"
-      PMA_HOST: symfony_db
+      PMA_HOST: database
       # Donne le mot de passe root pour que phpMyAdmin ait tous les accès
       MYSQL_ROOT_PASSWORD: root
       # Définit le nom de la base de données interne requise par phpMyAdmin

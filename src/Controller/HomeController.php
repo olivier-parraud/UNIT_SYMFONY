@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\User; // En haut avec les autres "use"
-use Doctrine\ORM\EntityManagerInterface; // En haut avec les autres "use"
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface; // En haut avec les autres "use"
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -15,8 +15,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
-        // Si l'utilisateur est déjà connecté, on peut le laisser sur l'accueil
-        // ou le rediriger ailleurs (ex: vers son profil)
+        // Si l'utilisateur est connecté, on le redirige immédiatement vers son profil
         if ($this->getUser()) {
             return $this->redirectToRoute('app_user_profile');
         }
@@ -31,12 +30,18 @@ class HomeController extends AbstractController
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
-    } // ← Fin de la fonction index
+    }
 
-    // --- LE NOUVEAU CODE EST PLACÉ ICI ---
     #[Route('/creer-les-comptes-test', name: 'app_create_accounts')]
     public function createAccounts(EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
+        // SÉCURITÉ : Vérifie si le compte test existe déjà en base pour éviter une erreur SQL de doublon
+        $existingUser = $em->getRepository(User::class)->findOneBy(['email' => 'user@test.com']);
+        if ($existingUser) {
+            return new Response('<h1>Les comptes existent déjà en base de données !</h1>
+                <p>Vous pouvez vous connecter directement sur la page d\'accueil.</p>');
+        }
+
         // 1. CRÉATION DU COMPTE UTILISATEUR STANDARD
         $user = new User();
         $user->setEmail('user@test.com');
@@ -51,12 +56,11 @@ class HomeController extends AbstractController
         $admin->setPassword($passwordHasher->hashPassword($admin, 'admin123'));
         $em->persist($admin);
 
-        // On envoie les deux en base de données
+        // On envoie tout en base de données
         $em->flush();
 
         return new Response('<h1>Comptes créés avec succès ! 🚀</h1>
             <p><strong>Compte User :</strong> user@test.com / user123</p>
             <p><strong>Compte Admin :</strong> admin@test.com / admin123</p>');
-    } // ← Fin de la fonction createAccounts
-
-} // ← ATTENTION : C'est la toute dernière accolade du fichier, elle ferme la classe HomeController.
+    }
+}

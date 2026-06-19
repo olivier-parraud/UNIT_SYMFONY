@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-5" style="max-width: 600px; margin: 0 auto; border-radius: 12px;">
+        <h1 class="mb-4 text-primary">👤 Mon Espace Profil</h1>
+        
+        <div class="p-3 mb-3 bg-light rounded">
+            <p class="mb-2"><strong>Votre Adresse Email :</strong> <br><span class="text-secondary">{{ user.email }}</span></p>
+            <p class="mb-0"><strong>Rôle détecté par le système :</strong> <br><span class="badge bg-dark mt-1">{{ user.roles|join(', ') }}</span></p>
+        </div>
+
+        <hr class="my-4">
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="alert alert-danger" role="alert">
+                <strong>🔐 Mode Administrateur Activé :</strong> Vous disposez de tous les accès de configuration.
+            </div>
+        {% else %}
+            <div class="alert alert-success" role="alert">
+                <strong>ℹ️ Mode Utilisateur Standard :</strong> Bienvenue dans votre tableau de bord.
+            </div>
+        {% endif %}
+
+        <div class="d-grid gap-2 mt-4">
+            <a href="/logout" class="btn btn-outline-danger">Se déconnecter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
